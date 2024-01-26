@@ -15,9 +15,9 @@ function SuggestedUsers() {
                 </Text>
             </Flex>
 
-            <SuggestedUser/>
-            <SuggestedUser/>
-            <SuggestedUser/>
+            <SuggestedUser name='User_1_' followers={0} avatar='https://bit.ly/dan-abramov'/>
+            <SuggestedUser name='User_2_' followers={0} avatar='https://bit.ly/rysan-florence'/>
+            <SuggestedUser name='User_3_' followers={0} avatar='https://bit.ly/code-beast'/>
 
             <Box fontSize={12} color={"gray.500"} mt={5} alignSelf={"start"}>
             &#169; 2023 Built By {" "}

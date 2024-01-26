@@ -7,11 +7,11 @@ function HomePage() {
   return (
     <Container maxW={"container.md"}>
       <Flex gap={20}>
-        <Box flex={2} py={12}>
+        <Box flex={4} py={12}>
           <FeedPosts />
         </Box>
 
-        <Box display={{base: "none", md: "block"}} maxW={"300px"} mr={20}>
+        <Box display={{base: "none", md: "block"}} maxW={"300px"} flex={3}>
           <SuggestedUsers/>
         </Box>
       </Flex>
