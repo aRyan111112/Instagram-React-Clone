@@ -7,12 +7,15 @@ import ProfilePosts from '../../components/Profile/ProfilePosts'
 function ProfilePage() {
   return (
     <Container maxW={"container.lg"}>
+      <Flex py={0} px={4} pl={{base:4, md:10}} w={"full"} mx={"auto"} flexDirection={"column"}>
       <ProfileHeader/>
-      <Box borderTop={"1px solid"} borderColor={"whiteAlpha.400"}>
+      </Flex>
+      
+      <Flex direction={"column"} borderTop={"1px solid"} borderColor={"whiteAlpha.300"} maxW={"full"} mx={"auto"}
+      px={{base: 2, sm: 4}}>
       <ProfileTabs/>
-      </Box>
       <ProfilePosts/>
-
+      </Flex>
     </Container>
   )
 }
