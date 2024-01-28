@@ -1,7 +1,8 @@
-import { Avatar, Flex, GridItem, Image, Text, useDisclosure } from '@chakra-ui/react'
+import { Avatar, Box, Flex, GridItem, Image, Text, useDisclosure } from '@chakra-ui/react'
 import React from 'react'
-import { AiFillHeart } from "react-icons/ai";
+import { AiFillDelete, AiFillHeart } from "react-icons/ai";
 import { FaComment } from "react-icons/fa"
+import { Divider } from '@chakra-ui/react'
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from '@chakra-ui/react'
 
 function ProfilePost({ img }) {
@@ -44,20 +45,39 @@ function ProfilePost({ img }) {
         <Image src={img} w={"100%"} h={"100%"} objectFit={"cover"} />
       </GridItem>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered={true} size={{base: "xl", md: "2xl"}}>
         <ModalOverlay />
         <ModalContent>
           <ModalCloseButton />
-          <ModalBody bg={"black"}>
+          <ModalBody bg={"black"} pb={5}>
 
-            <Flex>
-              <Flex flex={1.5}><Image src={img} alt='Profile-post' /></Flex>
+            <Flex w={{base: "none", sm: "70%", md: "full"}} mx={"auto"} gap={4}>
+              {/* post image */}
+              <Box flex={1}
+              borderRadius={4}
+              overflow={"hidden"}
+              borderColor={"whiteAlpha.300"}>
+                <Image src={img} alt='Profile-post' />
+              </Box>
 
               {/* ohter things */}
-              <Flex flex={1}>
-                <Avatar src='/profilepic.png' size={"sm"} />
-                <Text fontSize={12} fontWeight={"bold"}>aryan</Text>
-              </Flex>
+              <Box>
+                <Flex flex={1} flexDirection={"column"} px={7} display={{ base: "none", md: "flex" }}>
+
+                  <Flex alignItems={"center"} justifyContent={"space-between"}>
+                    <Flex alignItems={"center"} gap={2}>
+                      <Avatar src='/profilepic.png' size={"sm"} name='profile-pic'/>
+                      <Text fontSize={12} fontWeight={"bold"}>aryan</Text>
+                    </Flex>
+                    <Box _hover={{ bg: "whiteAlpha.300", color: "red.600" }} p={1} borderRadius={4} ml={16}>
+                      <AiFillDelete size={20} cursor={"pointer"}/>
+                    </Box>
+                  </Flex>
+
+                  <Divider orientation='horizontal' my={4} bg={"gray.500"}/>
+
+                </Flex>
+              </Box>
             </Flex>
 
           </ModalBody>
