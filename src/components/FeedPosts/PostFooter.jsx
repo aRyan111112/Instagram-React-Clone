@@ -17,7 +17,7 @@ function PostFooter({username}) {
   }
 
   return (
-    <Box>
+    <Box marginTop={"auto"} mb={10}>
       <Flex gap={3} mb={2}>
         <Box onClick={handleLike} cursor={'pointer'} fontSize={18}>
           {!liked ? <NotificationsLogo /> : <UnlikeLogo />}
