@@ -52,8 +52,8 @@ function ProfilePost({ img }) {
         <ModalContent>
           <ModalCloseButton />
           <ModalBody bg={"black"} pb={5}>
-            <Flex w={{ base: "90", sm: "70%", md: "full" }} mx={"auto"} gap="4"
-            >
+            <Flex w={{ base: "90", sm: "70%", md: "full" }} mx={"auto"} gap="4">
+
               {/* post image */}
               <Flex flex={1.5}
                 borderRadius={4}
@@ -65,41 +65,87 @@ function ProfilePost({ img }) {
               </Flex>
 
               {/* ohter things */}
-                <Flex flex={1} flexDirection={"column"} px={10} display={{ base: "none", md: "flex" }}>
-                  <Flex alignItems={"center"} justifyContent={"space-between"}>
-                    <Flex alignItems={"center"} gap={2}>
-                      <Avatar src='/profilepic.png' size={"sm"} name='profile-pic' />
-                      <Text fontSize={14} fontWeight={"bold"}>aryan</Text>
-                    </Flex>
-                    <Box _hover={{ bg: "whiteAlpha.300", color: "red.600" }} p={1} borderRadius={4}>
-                      <AiFillDelete size={20} cursor={"pointer"} />
-                    </Box>
+              <Flex flex={1} flexDirection={"column"} px={10} display={{ base: "none", md: "flex" }}>
+                <Flex alignItems={"center"} justifyContent={"space-between"}>
+                  <Flex alignItems={"center"} gap={2}>
+                    <Avatar src='/profilepic.png' size={"sm"} name='profile-pic' />
+                    <Text fontSize={14} fontWeight={"bold"}>aryan</Text>
                   </Flex>
-
-                  <Divider orientation='horizontal' my={4} bg={"gray.500"} />
-
-                  <VStack overflowY={"auto"} w={"full"} alignItems={"start"} maxH={"300px"}>
-                    <Comment
-                      createdAt={"1d ago"}
-                      username={"aryan"}
-                      profiolepic={"/profilepic"}
-                      text={"Dummy images from unsplash"} />
-
-                    <Comment
-                      createdAt={"12hr ago"}
-                      username={"abramov"}
-                      profiolepic={"https://bit.ly/dan-abramov"}
-                      text={"Nice pic"} />
-
-                    <Comment
-                      createdAt={"1w ago"}
-                      username={"kendodds"}
-                      profiolepic={"https://bit.ly/kent-c-dodds"}
-                      text={"Good clone dude"} />
-                  </VStack>
-                  <Divider orientation='horizontal' my={4} bg={"gray.500"} />
-                  <PostFooter />
+                  <Box _hover={{ bg: "whiteAlpha.300", color: "red.600" }} p={1} borderRadius={4}>
+                    <AiFillDelete size={20} cursor={"pointer"} />
+                  </Box>
                 </Flex>
+
+                <Divider orientation='horizontal' my={4} bg={"gray.500"} />
+
+                <VStack overflowY={"auto"} w={"full"} alignItems={"start"} maxH={"300px"}>
+                  <Comment
+                    createdAt={"1d ago"}
+                    username={"aryan"}
+                    profiolepic={"/profilepic"}
+                    text={"Dummy images from unsplash"} />
+                  <Comment
+                    createdAt={"12hr ago"}
+                    username={"abramov"}
+                    profiolepic={"https://bit.ly/dan-abramov"}
+                    text={"Nice pic"} />
+                  <Comment
+                    createdAt={"1w ago"}
+                    username={"kendodds"}
+                    profiolepic={"https://bit.ly/kent-c-dodds"}
+                    text={"Good clone dude"} />
+
+                  <Comment
+                    createdAt={"1d ago"}
+                    username={"aryan"}
+                    profiolepic={"/profilepic"}
+                    text={"Dummy images from unsplash"} />
+                  <Comment
+                    createdAt={"12hr ago"}
+                    username={"abramov"}
+                    profiolepic={"https://bit.ly/dan-abramov"}
+                    text={"Nice pic"} />
+                  <Comment
+                    createdAt={"1w ago"}
+                    username={"kendodds"}
+                    profiolepic={"https://bit.ly/kent-c-dodds"}
+                    text={"Good clone dude"} />
+
+                  <Comment
+                    createdAt={"1d ago"}
+                    username={"aryan"}
+                    profiolepic={"/profilepic"}
+                    text={"Dummy images from unsplash"} />
+                  <Comment
+                    createdAt={"12hr ago"}
+                    username={"abramov"}
+                    profiolepic={"https://bit.ly/dan-abramov"}
+                    text={"Nice pic"} />
+                  <Comment
+                    createdAt={"1w ago"}
+                    username={"kendodds"}
+                    profiolepic={"https://bit.ly/kent-c-dodds"}
+                    text={"Good clone dude"} />
+
+                  <Comment
+                    createdAt={"1d ago"}
+                    username={"aryan"}
+                    profiolepic={"/profilepic"}
+                    text={"Dummy images from unsplash"} />
+                  <Comment
+                    createdAt={"12hr ago"}
+                    username={"abramov"}
+                    profiolepic={"https://bit.ly/dan-abramov"}
+                    text={"Nice pic"} />
+                  <Comment
+                    createdAt={"1w ago"}
+                    username={"kendodds"}
+                    profiolepic={"https://bit.ly/kent-c-dodds"}
+                    text={"Good clone dude"} />
+                </VStack>
+                <Divider orientation='horizontal' my={4} bg={"gray.500"} />
+                <PostFooter isProfilePage={true} />
+              </Flex>
             </Flex>
           </ModalBody>
         </ModalContent>

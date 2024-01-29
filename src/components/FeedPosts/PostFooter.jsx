@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { CommentLogo, NotificationsLogo, UnlikeLogo } from '../../assets/constants'
 import { Box, Flex, Input, InputGroup, Text, InputRightElement, Button } from '@chakra-ui/react'
 
-function PostFooter({username}) {
+function PostFooter({ username, isProfilePage }) {
   const [liked, setliked] = useState(false)
   const [likes, setlikes] = useState(0)
   const handleLike = () => {
@@ -27,24 +27,28 @@ function PostFooter({username}) {
         </Box>
       </Flex>
       <Text fontSize={"sm"} fontWeight={600}> {likes} Likes </Text>
-      <Text fontSize={"sm"} fontWeight={700}>
-        {username}{" "}
-        <Text as={"span"} fontWeight={400}>Feeling good.</Text>
-      </Text>
-      <Text fontSize={"sm"} color={"gray"}>View all 0 comments</Text>
+      {!isProfilePage && (
+        <>
+          <Text fontSize={"sm"} fontWeight={700}>
+            {username}{" "}
+            <Text as={"span"} fontWeight={400}>Feeling good.</Text>
+          </Text>
+          <Text fontSize={"sm"} color={"gray"}>View all 0 comments</Text>
+        </>
+      )}
 
       <Flex w={"full"} alignItems={"center"} justifyContent={"space-between"} gap={2}>
         <InputGroup>
-        <Input placeholder='Add a comment...' variant={"flushed"} fontSize={14}/>
-        <InputRightElement>
-        <Button bg={"transparent"}
-        fontSize={14}
-        color={"blue.500"}
-        cursor={"pointer"}
-        _hover={{color: "white"}}>
-          Post
-        </Button>
-        </InputRightElement>
+          <Input placeholder='Add a comment...' variant={"flushed"} fontSize={14} />
+          <InputRightElement>
+            <Button bg={"transparent"}
+              fontSize={14}
+              color={"blue.500"}
+              cursor={"pointer"}
+              _hover={{ color: "white" }}>
+              Post
+            </Button>
+          </InputRightElement>
         </InputGroup>
       </Flex>
     </Box>
