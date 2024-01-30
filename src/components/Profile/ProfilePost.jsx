@@ -59,9 +59,8 @@ function ProfilePost({ img }) {
                 borderRadius={4}
                 border={"1px solid"}
                 overflow={"hidden"}
-                objectFit={"inherit"}
                 borderColor={"whiteAlpha.300"}>
-                <Image src={img} alt='Profile-post' />
+                <Image src={img} alt='Profile-post' objectFit={"contain"}/>
               </Flex>
 
               {/* ohter things */}
@@ -78,7 +77,7 @@ function ProfilePost({ img }) {
 
                 <Divider orientation='horizontal' my={4} bg={"gray.500"} />
 
-                <VStack overflowY={"auto"} w={"full"} alignItems={"start"} maxH={"300px"}>
+                <VStack overflowY={"auto"} w={"full"} alignItems={"start"} maxH={"450px"}>
                   <Comment
                     createdAt={"1d ago"}
                     username={"aryan"}
