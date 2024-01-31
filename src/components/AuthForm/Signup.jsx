@@ -3,7 +3,8 @@ import { useState } from 'react'
 import { Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
-import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth'
+import { Alert, AlertIcon } from '@chakra-ui/react'
+import useSignUpWithEmailAndPassword from "../../hooks/useSignUpWithEmailAndPassword";
 
 function Signup() {
   const [inputs, setinputs] = useState({
@@ -14,7 +15,7 @@ function Signup() {
   }
   )
   const [showPassword, setshowPassword] = useState(false)
-  const {loading, error, signup} = useSignInWithEmailAndPassword()
+  const { loading, error, signup } = useSignUpWithEmailAndPassword()
 
   return (
     <>
@@ -26,7 +27,7 @@ function Signup() {
         fontSize={14}
         type='email'
       />
-       <Input
+      <Input
         placeholder='Username'
         size={"sm"}
         value={inputs.username}
@@ -34,7 +35,7 @@ function Signup() {
         fontSize={14}
         type='text'
       />
-       <Input
+      <Input
         placeholder='Fullname'
         size={"sm"}
         value={inputs.fullname}
@@ -42,25 +43,33 @@ function Signup() {
         fontSize={14}
         type='text'
       />
-      
-      <InputGroup>
-      <Input
-        placeholder='Password'
-        fontSize={14}
-        size={"sm"}
-        onChange={(e) => setinputs({ ...inputs, password: e.target.value })}
-        value={inputs.password}
-        type={showPassword ? "text" : "password"}
-      />
 
-      <InputRightElement h={"full"}>
-        <Button onClick={() => {setshowPassword(!showPassword)}} variant={"ghost"} size={"sm"}>
-          {showPassword ? <ViewIcon/> : <ViewOffIcon/>}
-        </Button>
-      </InputRightElement>
+      <InputGroup>
+        <Input
+          placeholder='Password'
+          fontSize={14}
+          size={"sm"}
+          onChange={(e) => setinputs({ ...inputs, password: e.target.value })}
+          value={inputs.password}
+          type={showPassword ? "text" : "password"}
+        />
+
+        <InputRightElement h={"full"}>
+          <Button onClick={() => { setshowPassword(!showPassword) }} variant={"ghost"} size={"sm"}>
+            {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+          </Button>
+        </InputRightElement>
       </InputGroup>
 
-      <Button w={"full"} colorScheme='blue' onClick={() => signup(inputs)}> 
+      {error && (
+        <Alert status='error' fontSize={13}>
+        <AlertIcon fontSize={12}/>
+        No data
+      </Alert>
+      )}
+
+      <Button w={"full"} colorScheme='blue' isLoading={loading} onClick={() => signup(inputs)}
+      >
         Sign Up
       </Button>
     </>
