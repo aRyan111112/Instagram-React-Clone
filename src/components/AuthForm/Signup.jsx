@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth'
 
 function Signup() {
   const [inputs, setinputs] = useState({
@@ -13,6 +14,7 @@ function Signup() {
   }
   )
   const [showPassword, setshowPassword] = useState(false)
+  const {loading, error, signup} = useSignInWithEmailAndPassword()
 
   return (
     <>
@@ -58,7 +60,7 @@ function Signup() {
       </InputRightElement>
       </InputGroup>
 
-      <Button w={"full"} colorScheme='blue'>
+      <Button w={"full"} colorScheme='blue' onClick={() => signup(inputs)}> 
         Sign Up
       </Button>
     </>
