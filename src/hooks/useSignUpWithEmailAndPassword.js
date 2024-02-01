@@ -5,8 +5,9 @@ import useShowToast from './useShowToast';
 
 function useSignUpWithEmailAndPassword() {
 
-  const [ createUserWithEmailAndPassword, loading, error ] = useCreateUserWithEmailAndPassword(auth);
+  const [ createUserWithEmailAndPassword, user, loading, error ] = useCreateUserWithEmailAndPassword(auth);
   const showToast = useShowToast()
+
   
   const signup = async (inputs) => {
     if(!inputs.email || !inputs.password || !inputs.fullname || !inputs.username){
@@ -15,9 +16,13 @@ function useSignUpWithEmailAndPassword() {
     }
     try {
       const newUser = await createUserWithEmailAndPassword(inputs.email, inputs.password)
+
+      // if newUser has not been created beacuse it already exists and there is a error than we throw this toast
       if(!newUser && error){
-      showToast("ERROR", "thisis", "error")    
+        showToast("Error", error.message, "error")
       return
+
+      // if the user has been created
       }
       if(newUser) {
         const userDoc = {
@@ -32,15 +37,15 @@ function useSignUpWithEmailAndPassword() {
           posts:[],
           createdAt: Date.now()
         }
-        // puting the above data in firestore
+        // putting the above data in firestore
         await setDoc(doc(firestore, "users", newUser.user.uid), userDoc);
-        // puting the above data in local storage
+        // putting the above data in local storage
         localStorage.setItem("user-info", JSON.stringify(userDoc))
 
       }
     } 
     catch (error) {
-      showToast("ERROR", "THIS IS AN ERROR", "error")
+      showToast("Error", error.message, "error")
     }
   }
   return {loading, error, signup}

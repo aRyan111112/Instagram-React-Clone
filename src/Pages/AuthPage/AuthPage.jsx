@@ -4,7 +4,7 @@ import AuthForm from "../../components/AuthForm/AuthForm";
 
 function AuthPage() {
   return (
-    <Flex minH={"100vh"} justifyContent={"center"} alignItems={"center"}>
+    <Flex minH={"100vh"} justifyContent={"center"} alignItems={"center"} px={4}>
       <Container maxW={"container.md"} padding={0}>
         <Flex justifyContent={"center"} alignItems={"center"}>
           {/* // Left Side // */}
@@ -12,10 +12,10 @@ function AuthPage() {
             <Image src="/auth.png" alt="Phone img" h={500} />
           </Box>
           {/* // Right Side // */}
-          <VStack>
+          <VStack align={"stretch"} overflowX={"hidden"}>
             <AuthForm />
-            <Box>Get the app</Box>
-            <Flex gap={4}>
+            <Box textAlign={"center"}>Get the app</Box> 
+            <Flex gap={4} justifyContent={"center"}>
               <Image src="/playstore.png" h={10} />
               <Image src="/microsoft.png" h={10} />
             </Flex>

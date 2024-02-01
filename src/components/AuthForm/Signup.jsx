@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
-import { Alert, AlertIcon } from '@chakra-ui/react'
+import { Alert, AlertIcon, AlertDescription, AlertTitle } from '@chakra-ui/react'
 import useSignUpWithEmailAndPassword from "../../hooks/useSignUpWithEmailAndPassword";
 
 function Signup() {
@@ -62,10 +62,10 @@ function Signup() {
       </InputGroup>
 
       {error && (
-        <Alert status='error' fontSize={13}>
-        <AlertIcon fontSize={12}/>
-        No data
-      </Alert>
+        <Alert status='error'>
+          <AlertIcon />
+          {error.message}
+        </Alert>
       )}
 
       <Button w={"full"} colorScheme='blue' isLoading={loading} onClick={() => signup(inputs)}
