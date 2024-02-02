@@ -23,7 +23,7 @@ function AuthForm() {
         <Box h={"2px"} bg={"gray.400"} flex={2}/>
       </Flex>
 
-      <GoogleAuth/>
+      <GoogleAuth prefix = {isLogin ? "Log in" : "sign up"}/>
       </VStack>
     </Box> 
 
