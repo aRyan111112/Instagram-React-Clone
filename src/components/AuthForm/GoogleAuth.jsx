@@ -1,70 +1,61 @@
-import React from 'react'
-import { Button, Image, Text } from '@chakra-ui/react'
-import { useSignInWithGoogle } from 'react-firebase-hooks/auth';
-import { auth, firestore } from '../../firebase/firebase';
-import useShowToast from '../../hooks/useShowToast';
-import useAuthStore from '../../store/authStore';
-import { doc, getDoc } from "firebase/firestore";
+import { Flex, Image, Text } from "@chakra-ui/react";
+import { useSignInWithGoogle } from "react-firebase-hooks/auth";
+import { auth, firestore } from "../../firebase/firebase";
+import useShowToast from "../../hooks/useShowToast";
+import useAuthStore from "../../store/authStore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
+const GoogleAuth = ({ prefix }) => {
+	const [signInWithGoogle, , , error] = useSignInWithGoogle(auth);
+	const showToast = useShowToast();
+	const loginUser = useAuthStore((state) => state.login);
 
-function GoogleAuth({ prefix }) {
-  const showToast = useShowToast()
-  const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
+	const handleGoogleAuth = async () => {
+		try {
+			const newUser = await signInWithGoogle();
+			if (!newUser && error) {
+				showToast("Error", error.message, "error");
+				return;
+			}
+			const userRef = doc(firestore, "users", newUser.user.uid);
+			const userSnap = await getDoc(userRef);
 
-  const loginUser = useAuthStore((state) => state.login)
+			if (userSnap.exists()) {
+				// login
+				const userDoc = userSnap.data();
+				localStorage.setItem("user-info", JSON.stringify(userDoc));
+				loginUser(userDoc);
+			} else {
+				// signup
+				const userDoc = {
+					uid: newUser.user.uid,
+					email: newUser.user.email,
+					username: newUser.user.email.split("@")[0],
+					fullName: newUser.user.displayName,
+					bio: "",
+					profilePicURL: newUser.user.photoURL,
+					followers: [],
+					following: [],
+					posts: [],
+					createdAt: Date.now(),
+				};
+				await setDoc(doc(firestore, "users", newUser.user.uid), userDoc);
+				localStorage.setItem("user-info", JSON.stringify(userDoc));
+				loginUser(userDoc);
+			}
+		} catch (error) {
+			showToast("Error", error.message, "error");
+		}
+	};
 
-  const handleGoogleAuth = async () => {
-    try {
-      const newUser = await signInWithGoogle()
-      if (!newUser && error) {
-        showToast("Error", error.message, "error")
-        return
-      }
+	return (
+		<Flex alignItems={"center"} justifyContent={"center"} cursor={"pointer"} onClick={handleGoogleAuth}>
+			<Image src='/google.png' w={5} alt='Google logo' />
+			<Text mx='2' color={"blue.500"}>
+				{prefix} with Google
+			</Text>
+		</Flex>
+	);
+};
 
-      const userRef = doc(firestore, "users", newUser.user.uid);
-      const userSnap = await getDoc(userRef);
-
-
-      if (userSnap.exists()) {
-
-        // if already signed with google then it will not create another document of data in authentication and firestore
-        const userDoc = userSnap.data()
-        localStorage.setItem("user-info", JSON.stringify(userDoc))
-        loginUser(userDoc)
-      }
-      else {
-        // id user is signing up for first time uging google then it create a document and save user in it
-        const userDoc = {
-          uid: newUser.user.uid,
-          email: newUser.user.email,                     //getting email from goggle
-          username: newUser.user.email.split("@")[0],
-          fullname: newUser.user.displayName,            //getting fullname from goggle
-          bio: "",
-          profilePicUrl: newUser.user.photoURL,          //getting photo from goggle
-          followers: [],
-          following: [],
-          posts: [],
-          createdAt: Date.now()
-        }
-        // putting the above data in firestore
-        await setDoc(doc(firestore, "users", newUser.user.uid), userDoc);
-        // putting the above data in local storage
-        localStorage.setItem("user-info", JSON.stringify(userDoc))
-        // adding user-info to 'user' state in authStore.js
-        loginUser(userDoc)
-      }
-
-    } catch (error) {
-      showToast("Error", error.message, "error")
-    }
-  }
-
-  return (
-    <Button gap={2} cursor={"pointer"} my={"12px"} onClick={handleGoogleAuth} isLoading={loading} bg={"transparent"}>
-      <Image src='/google.png' h={"24px"} alt='google logo' />
-      <Text color={"blue.500"}>{prefix} with Google</Text>
-    </Button>
-  )
-}
-
-export default GoogleAuth
+export default GoogleAuth;
