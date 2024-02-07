@@ -12,7 +12,7 @@ function usePreviewImg() {
         if (file && file.type.startsWith("image/")) {
             if (file.size > maxFileSizeInBytes) {
                 showToast("Error", "File size must be less than 2MB", "error")
-                setselectedFile(null)
+                setSelectedFile(null)
                 return
             }
             const reader = new FileReader()

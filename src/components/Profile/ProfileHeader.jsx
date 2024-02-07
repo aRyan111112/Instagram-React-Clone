@@ -5,11 +5,12 @@ import useUserProfileStore from '../../store/userProfileStore'
 import EditProfile from './EditProfile'
 
 function ProfileHeader() {
-    const {userProfile} = useUserProfileStore()
+    const userProfile = useUserProfileStore((state) => state.userProfile)
     const authUser = useAuthStore((state) => state.user)
     const visitingOwnProfileAndAuth = authUser && authUser.username === userProfile.username
     const visitingAnotherProfileAndAuth = authUser && authUser.username !== userProfile.username
     const { isOpen, onOpen, onClose } = useDisclosure()
+    
 
     return (
         <Flex>
@@ -17,7 +18,7 @@ function ProfileHeader() {
 
                 {/* Avatar prfile pic */}
                 <AvatarGroup size={{ base: "xl", md: "2xl" }} justifySelf={"center"} alignSelf={"flex-start"} mx={"auto"}>
-                    <Avatar src={userProfile.profilepicURL} alt='profile-pic' />
+                    <Avatar src={userProfile.profilePicURL} alt='profile-pic' />
                 </AvatarGroup>
 
                 <VStack alignItems={"start"} gap={2} mx={"auto"} flex={1}>

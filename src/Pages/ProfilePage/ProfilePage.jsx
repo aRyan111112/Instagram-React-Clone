@@ -7,11 +7,10 @@ import { useParams } from 'react-router-dom'
 import useGetUserProfileByUsername from '../../hooks/useGetUserProfileByUsername'
 import {Link as RouterLink} from 'react-router-dom'
 import { Link, Skeleton, SkeletonCircle, Text, VStack } from "@chakra-ui/react";
-import { useState } from 'react'
 
 function ProfilePage() {
   const {username} = useParams()
-  const {isLoading, userProfile} = useGetUserProfileByUsername(username)
+  const {isLoading, userProfile} = useGetUserProfileByUsername(username)	
 
   const userNotFound = !isLoading && !userProfile
   if(userNotFound) return <UserNotFound/>
