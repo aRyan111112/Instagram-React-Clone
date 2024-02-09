@@ -12,7 +12,7 @@ function HomePage() {
         </Box>
 
         <Box display={{base: "none", md: "block"}} maxW={"300px"} flex={3}>
-          <SuggestedUsers/>
+          {/* <SuggestedUsers/> */}
         </Box>
       </Flex>
     </Container>
