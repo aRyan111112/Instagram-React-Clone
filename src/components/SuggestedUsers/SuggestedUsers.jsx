@@ -2,22 +2,28 @@ import { VStack, Text, Flex, Box, Link} from '@chakra-ui/react'
 import React from 'react'
 import SuggestedHeader from './SuggestedHeader'
 import SuggestedUser from './SuggestedUser'
+import useGetSuggestedUsers from '../../hooks/useGetSuggestedUsers'
 
 function SuggestedUsers() {
+    const {isLoading, suggestedUsers} = useGetSuggestedUsers()
+
+    if(isLoading) return null
     return (
         <VStack py={8} px={6} gap={4}>
             <SuggestedHeader />
 
-            <Flex justifyContent={"space-between"} w={"full"} alignItems={"center"}>
-                <Text fontSize={12} fontWeight={"bold"} color={"gray.500"}>Suggested for you</Text>
-                <Text fontSize={12} fontWeight={"bold"} _hover={{ color: "gray.400" }} cursor={"pointer"}
-                >See all
-                </Text>
-            </Flex>
+           {suggestedUsers.length !== 0 && (
+             <Flex justifyContent={"space-between"} w={"full"} alignItems={"center"}>
+             <Text fontSize={12} fontWeight={"bold"} color={"gray.500"}>Suggested for you</Text>
+             <Text fontSize={12} fontWeight={"bold"} _hover={{ color: "gray.400" }} cursor={"pointer"}
+             >See all
+             </Text>
+         </Flex>
+           )}
 
-            <SuggestedUser name='User_1_' followers={0} avatar='https://bit.ly/dan-abramov'/>
-            <SuggestedUser name='User_2_' followers={0} avatar='https://bit.ly/rysan-florence'/>
-            <SuggestedUser name='User_3_' followers={0} avatar='https://bit.ly/code-beast'/>
+            {suggestedUsers.map((user) => (
+                <SuggestedUser user={user} key={user.id}/>
+            ))}
 
             <Box fontSize={12} color={"gray.500"} mt={5} alignSelf={"start"}>
             &#169; 2023 Built By {" "}
