@@ -2,6 +2,7 @@ import { create } from 'zustand'
 
 const useUserProfileStore = create((set) => ({
    userProfile: null,
-   setUserProfile:(userProfile) => set({userProfile})
+   setUserProfile:(userProfile) => set({userProfile}),
+   addPost: (post) => set((state) => ({userProfile: {...state.userProfile, posts: [post.id, ...state.userProfile.posts]}})) //to change no. of posts
 }))
 export default useUserProfileStore

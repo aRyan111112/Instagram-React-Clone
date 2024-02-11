@@ -1,14 +1,71 @@
-import { Avatar, Box, Flex, GridItem, Image, Text, VStack, useDisclosure } from '@chakra-ui/react'
-import React from 'react'
-import { AiFillDelete, AiFillHeart } from "react-icons/ai";
-import { FaComment } from "react-icons/fa"
-import { Divider } from '@chakra-ui/react'
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from '@chakra-ui/react'
-import Comment from '../Comment/Comment';
-import PostFooter from '../FeedPosts/PostFooter'
+import {
+	Avatar,
+	Button,
+	Divider,
+	Flex,
+	GridItem,
+	Image,
+	Modal,
+	ModalBody,
+	ModalCloseButton,
+	ModalContent,
+	ModalOverlay,
+	Text,
+	VStack,
+	useDisclosure,
+} from "@chakra-ui/react";
+import { AiFillHeart } from "react-icons/ai";
+import { AiFillDelete } from "react-icons/ai";
+import { FaComment } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import Comment from "../Comment/Comment";
+import PostFooter from "../FeedPosts/PostFooter";
+import useUserProfileStore from "../../store/userProfileStore";
+import useAuthStore from "../../store/authStore";
+import useShowToast from "../../hooks/useShowToast";
+import { useState } from "react";
+import { deleteObject, ref } from "firebase/storage";
+import { firestore, storage } from "../../firebase/firebase";
+import { arrayRemove, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import usePostStore from "../../store/postStore";
+import Caption from "../Comment/Caption";
 
-function ProfilePost({ img }) {
+
+function ProfilePost({ post }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const userProfile = useUserProfileStore((state) => state.userProfile)
+  const authUser = useAuthStore((state) => state.user)
+  const showToast = useShowToast()
+  const [isDeleting, setIsDeleting] = useState(false)
+  const deletePost = usePostStore((state) => state.deletePost)
+  const decrementPostsCount = useUserProfileStore((state) => state.deletePost);
+
+  const handleDeletePost = async () => {
+    if(!window.confirm("Are you sure want to delete this post?")) return;
+    if(isDeleting) return;
+
+    try {
+      const imageRef = ref(storage, `posts/${post.id}`)
+      await deleteObject(imageRef)
+      const userRef = doc(firestore, "users", authUser.uid)
+      await deleteDoc(doc(firestore, "posts", post.id))
+
+      await updateDoc(userRef, {
+        posts: arrayRemove(post.id)
+      })
+
+      deletePost(post.id)
+      decrementPostsCount(post.id)  
+      showToast("Success", "Post deleted successfully", "success")
+    } catch (error) {
+      showToast("Error", error.message, "error")
+    } finally {
+      setIsDeleting(false)
+    }
+  }
+
+
+
   return (
     <>
       <GridItem
@@ -36,15 +93,15 @@ function ProfilePost({ img }) {
           <Flex justifyContent={"center"} alignItems={"center"} gap={30} fontSize={20}>
             <Flex justifyContent={"center"} alignItems={"center"} gap={1} >
               <AiFillHeart size={20} />
-              <Text fontWeight={"bold"}>7</Text>
+              <Text fontWeight={"bold"}>{post.likes.length}</Text>
             </Flex>
             <Flex justifyContent={"center"} alignItems={"center"} gap={1}>
               <FaComment size={20} />
-              <Text fontWeight={"bold"}>7</Text>
+              <Text fontWeight={"bold"}>{post.comments.length}</Text>
             </Flex>
           </Flex>
         </Flex>
-        <Image src={img} w={"100%"} h={"100%"} objectFit={"cover"} />
+        <Image src={post.imageURL} w={"100%"} h={"100%"} objectFit={"cover"} />
       </GridItem>
 
       <Modal isOpen={isOpen} onClose={onClose} isCentered={true} size={{ base: "3xl", md: "5xl" }}>
@@ -52,98 +109,46 @@ function ProfilePost({ img }) {
         <ModalContent>
           <ModalCloseButton />
           <ModalBody bg={"black"} pb={5}>
-            <Flex w={{ base: "90", sm: "70%", md: "full" }} mx={"auto"} gap="4">
+            <Flex w={{ base: "90", sm: "70%", md: "full" }} mx={"auto"} gap="4" maxH={"90vh"} minH={"50vh"}>
 
               {/* post image */}
               <Flex flex={1.5}
                 borderRadius={4}
                 border={"1px solid"}
                 overflow={"hidden"}
-                borderColor={"whiteAlpha.300"}>
-                <Image src={img} alt='Profile-post' objectFit={"contain"}/>
+                borderColor={"whiteAlpha.300"}
+                justifyContent={"center"}
+                alignItems={"center"}
+                >
+                <Image src={post.imageURL} alt='Profile-post' objectFit={"contain"}/>
               </Flex>
 
               {/* ohter things */}
               <Flex flex={1} flexDirection={"column"} px={10} display={{ base: "none", md: "flex" }}>
                 <Flex alignItems={"center"} justifyContent={"space-between"}>
                   <Flex alignItems={"center"} gap={2}>
-                    <Avatar src='/profilepic.png' size={"sm"} name='profile-pic' />
-                    <Text fontSize={14} fontWeight={"bold"}>aryan</Text>
+                    <Avatar src={userProfile.profilePicURL} size={"sm"} name='profile-pic' />
+                    <Text fontSize={14} fontWeight={"bold"}>{userProfile.username}</Text>
                   </Flex>
-                  <Box _hover={{ bg: "whiteAlpha.300", color: "red.600" }} p={1} borderRadius={4}>
+                  {authUser?.uid === userProfile.uid && (
+                    <Button _hover={{ bg: "whiteAlpha.300", color: "red.600" }} bg={"transparent"}p={1} borderRadius={4} onClick={handleDeletePost} isLoading={isDeleting}>
                     <AiFillDelete size={20} cursor={"pointer"} />
-                  </Box>
+                  </Button>
+                  )}
                 </Flex>
 
                 <Divider orientation='horizontal' my={4} bg={"gray.500"} />
 
                 <VStack overflowY={"auto"} w={"full"} alignItems={"start"} maxH={"450px"}>
-                  <Comment
-                    createdAt={"1d ago"}
-                    username={"aryan"}
-                    profiolepic={"/profilepic"}
-                    text={"Dummy images from unsplash"} />
-                  <Comment
-                    createdAt={"12hr ago"}
-                    username={"abramov"}
-                    profiolepic={"https://bit.ly/dan-abramov"}
-                    text={"Nice pic"} />
-                  <Comment
-                    createdAt={"1w ago"}
-                    username={"kendodds"}
-                    profiolepic={"https://bit.ly/kent-c-dodds"}
-                    text={"Good clone dude"} />
-
-                  <Comment
-                    createdAt={"1d ago"}
-                    username={"aryan"}
-                    profiolepic={"/profilepic"}
-                    text={"Dummy images from unsplash"} />
-                  <Comment
-                    createdAt={"12hr ago"}
-                    username={"abramov"}
-                    profiolepic={"https://bit.ly/dan-abramov"}
-                    text={"Nice pic"} />
-                  <Comment
-                    createdAt={"1w ago"}
-                    username={"kendodds"}
-                    profiolepic={"https://bit.ly/kent-c-dodds"}
-                    text={"Good clone dude"} />
-
-                  <Comment
-                    createdAt={"1d ago"}
-                    username={"aryan"}
-                    profiolepic={"/profilepic"}
-                    text={"Dummy images from unsplash"} />
-                  <Comment
-                    createdAt={"12hr ago"}
-                    username={"abramov"}
-                    profiolepic={"https://bit.ly/dan-abramov"}
-                    text={"Nice pic"} />
-                  <Comment
-                    createdAt={"1w ago"}
-                    username={"kendodds"}
-                    profiolepic={"https://bit.ly/kent-c-dodds"}
-                    text={"Good clone dude"} />
-
-                  <Comment
-                    createdAt={"1d ago"}
-                    username={"aryan"}
-                    profiolepic={"/profilepic"}
-                    text={"Dummy images from unsplash"} />
-                  <Comment
-                    createdAt={"12hr ago"}
-                    username={"abramov"}
-                    profiolepic={"https://bit.ly/dan-abramov"}
-                    text={"Nice pic"} />
-                  <Comment
-                    createdAt={"1w ago"}
-                    username={"kendodds"}
-                    profiolepic={"https://bit.ly/kent-c-dodds"}
-                    text={"Good clone dude"} />
+                  {/* caption */}
+                  {post.caption && <Caption post= {post} />}
+                  {/* comments */}
+                  {post.comments.map(comment => (
+                    <Comment key={comment.id} comment={comment}/>
+                  ))}
                 </VStack>
                 <Divider orientation='horizontal' my={4} bg={"gray.500"} />
-                <PostFooter isProfilePage={true} />
+                <PostFooter isProfilePage={true} post={post} />
               </Flex>
             </Flex>
           </ModalBody>
