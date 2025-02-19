@@ -41,4 +41,4 @@ function AuthForm() {
   )
 }
 
-export default AuthForm
+export default AuthForm;
